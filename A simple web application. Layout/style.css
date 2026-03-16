@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'TT Norms Pro';
+    src: url('TTNormsPro-Regular.woff2') format('woff2');
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'TT Norms Pro';
+    src: url('TTNormsPro-Medium.woff2') format('woff2');
+    font-weight: bold;
+}
+
+:root {
+    --bg-page: #7545E0;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --border-light: rgba(255, 255, 255, 0.2);
+    --border-hover: rgba(255, 255, 255, 0.3);
+    --border-active: rgba(255, 255, 255, 0.4);
+    --button-bg-hover: rgba(255, 255, 255, 0.1);
+    --button-bg-active: rgba(255, 255, 255, 0.2);
+    --accent: #7545E0;
+    --accent-hover: #5a32b0;
+    --accent-active: #3f1f8f;
+    --execute-bg: #9f7af2;
+    --execute-hover: #b394f5;
+    --execute-active: #c7aef7;
+    --white: #ffffff;
+    --black: #000000;
+    --gold: #FFD700;
+    --gray-hover: #A0A0A0;
+    --footer-bg: #000000;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, #3a1a6a, #b07cf0);
+    font-family: 'TT Norms Pro', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+
+.card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light) !important;
+    border-radius: 24px !important;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+    border-color: var(--border-hover) !important;
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    object-fit: contain;
+    height: 100px;
+    padding: 10px;
+}
+
+
+.card .btn-primary {
+    background: var(--accent) !important;
+    border: none !important;
+    border-radius: 16px !important;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.card .btn-primary:hover {
+    background: var(--accent-hover) !important;
+    transform: scale(1.02);
+}
+
+.card .btn-primary:active {
+    background: var(--accent-active) !important;
+    transform: scale(0.98);
+}
