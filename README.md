@@ -1,4 +1,4 @@
-# Лабораторная работа №1 — Калькулятор на HTML и CSS
+# Лабораторная работа №2 — Калькулятор на JavaScript
 
 ## Содержание
 
@@ -14,13 +14,13 @@
 
 ## Задание
 
-Создание калькулятора. Вёрстка на HTML и CSS. Скопировать 3–5 основных цветов кодами с сайта по выбранной теме (хедер, фон, карточки, кнопки, hover) и ещё 2–3 CSS-свойства (padding, border-radius и т.д.).
+Создание калькулятора. Функции на JavaScript. Реализовать в калькуляторе индивидуальную операцию по теме, функция должна быть встроена в логику калькулятора без дополнительных окон и `alert`.
 
 ---
 
 ## Цель
 
-Познакомиться с базовыми технологиями веб-разработки: HTML-разметка, CSS-стилизация, работа с цветами и hover-эффектами. Научиться воспроизводить стилистику реального сайта через инспектор браузера.
+Познакомиться с JavaScript: обработка событий, работа с DOM, написание функций. Реализовать логику калькулятора и индивидуальную банковскую операцию.
 
 ---
 
@@ -28,87 +28,126 @@
 
 **Тема:** Банк Точка ([tochka.com](https://tochka.com))  
 **Студент:** Перфильев С.М., группа ИУ5-45Б  
-**Задание:** [Туториал к лабораторной работе №1](https://github.com/iu5git/JavaScript/blob/main/tutorials/lab1/README.md)
+**Задание:** [Туториал к лабораторной работе №2](https://github.com/iu5git/JavaScript/blob/main/tutorials/lab2/README.md)
 
 ---
 
 ## Реализация
 
-Проект состоит из двух HTML-страниц:
+Калькулятор реализован на чистом JavaScript без сторонних библиотек. Логика построена на строковом выражении `expression`, которое накапливается при нажатии кнопок и вычисляется функцией `evaluateExpression` при нажатии `=`.
 
-- `calculator.html` — основная страница с калькулятором
-- `info.html` — страница с информацией о лабораторной работе
-
-Стилистика воспроизведена с сайта Точка Банк: фиолетовый градиентный фон, белые кнопки с фиолетовым акцентом, тёмный хедер и футер, шрифт TT Norms Pro.
+**Индивидуальная операция — кнопка `000`** (быстрый ввод круглых сумм).  
+Актуально в контексте банковской темы: при вводе крупных сумм (10 000, 500 000 и т.д.) кнопка `000` позволяет не нажимать ноль три раза подряд. Операция встроена в логику ввода числа без дополнительных окон.
 
 ---
 
 ## Дополнительные задания
 
-### Доп. вопрос 1 — CSS-переменные для централизованного управления цветами
+### Доп. вопрос 1 — Индивидуальная операция: кнопка `000`
 
-Все цвета вынесены в CSS-переменные через `:root`, что позволяет менять палитру в одном месте. Цвета сняты с сайта Точка через инспектор браузера.
+Кнопка добавляет сразу три нуля к текущему числу. Обрабатывает граничные случаи: не допускает `0000`, корректно работает после оператора.
 
-```css
-:root {
-    --bg-page: #7545E0;
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --border-light: rgba(255, 255, 255, 0.2);
-    --border-hover: rgba(255, 255, 255, 0.3);
-    --accent: #7545E0;
-    --accent-hover: #5a32b0;
-    --accent-active: #3f1f8f;
-    --execute-bg: #9f7af2;
-    --footer-bg: #000000;
+```javascript
+document.getElementById('btn_op_000').onclick = function() {
+    if (justEvaluated) {
+        expression = preview || '';
+        preview = '';
+        justEvaluated = false;
+    }
+
+    const tokenInfo = getLastToken();
+    if (!tokenInfo) {
+        expression = '000';
+        updatePreview();
+        return;
+    }
+
+    const { token, start } = tokenInfo;
+
+    if (token === '') {
+        expression += '000';
+    } else if (token === '0') {
+        expression = expression.substring(0, start) + '000';
+    } else if (/^0+$/.test(token) && token.length >= 3) {
+        return; // не допускаем 0000...
+    } else {
+        expression = expression.substring(0, start) + token + '000';
+    }
+
+    updatePreview();
+};
+```
+
+### Доп. вопрос 2 — Связь кнопки `=` с кодом: вычисление выражения
+
+При нажатии `=` строка `expression` передаётся в `evaluateExpression`, которая безопасно вычисляет её через `new Function`. Поддерживаются все операции: `+`, `-`, `×`, `/`, `^2`, `√`, `sin`, `cos`, `lg`, `ln`, `!`.
+
+```javascript
+document.getElementById('btn_op_equal').onclick = function() {
+    if (!expression || justEvaluated) return;
+    const result = evaluateExpression(expression);
+    if (result && result !== 'Ошибка') {
+        expression = result;
+        preview = '';
+        justEvaluated = true;
+    } else {
+        expression = 'Ошибка';
+        preview = '';
+        justEvaluated = true;
+    }
+    updateDisplay();
+};
+
+function evaluateExpression(expr) {
+    if (!expr) return null;
+
+    const safeSqrt = (x) => {
+        if (x < 0) throw new Error('Корень из отрицательного числа');
+        return Math.sqrt(x);
+    };
+
+    let evalStr = expr
+        .replace(/×/g, '*')
+        .replace(/\^2/g, '**2')
+        .replace(/√\(/g, 'safeSqrt(')
+        .replace(/sin\(/g, 'Math.sin(')
+        .replace(/cos\(/g, 'Math.cos(');
+
+    try {
+        const factorial = (n) => {
+            n = Number(n);
+            if (n < 0 || !Number.isInteger(n)) return NaN;
+            let result = 1;
+            for (let i = 2; i <= n; i++) result *= i;
+            return result;
+        };
+        const func = new Function('factorial', 'safeSqrt', 'return ' + evalStr);
+        const result = func(factorial, safeSqrt);
+        return isFinite(result) ? result.toString() : 'Ошибка';
+    } catch {
+        return 'Ошибка';
+    }
 }
 ```
 
-### Доп. вопрос 2 — Hover и active эффекты на кнопках
+### Доп. вопрос 3 — Смена темы фона калькулятора
 
-Реализованы три состояния для каждого типа кнопок: обычное, hover (наведение) и active (нажатие). Добавлена анимация масштаба через `transform: scale`.
+Встроена в логику без alert и дополнительных окон: кнопка 🎨 циклически переключает градиентные фоны прямо на странице.
 
-```css
-.my-btn:hover {
-    background: var(--button-bg-hover);
-    border-color: var(--border-hover);
-    transform: scale(1.05);
-}
+```javascript
+const bgColors = [
+    'linear-gradient(135deg, #3a1a6a, #b07cf0)',
+    'linear-gradient(135deg, #1e3c72, #2a5298)',
+    'linear-gradient(135deg, #4568DC, #B06AB3)',
+    'linear-gradient(135deg, #43C6AC, #F8FFAE)',
+    'linear-gradient(135deg, #FF512F, #DD2476)'
+];
+let bgIndex = 0;
 
-.my-btn.secondary:hover,
-.my-btn.primary:hover {
-    background: var(--accent-hover);
-    color: var(--white);
-    border-color: transparent;
-}
-
-.my-btn:active {
-    background: var(--button-bg-active);
-    border-color: var(--border-active);
-    transform: scale(0.98);
-}
-```
-
-### Доп. вопрос 3 — Подключение фирменного шрифта через @font-face
-
-Подключён оригинальный шрифт банка Точка — TT Norms Pro — через `@font-face` с двумя начертаниями: обычным и жирным.
-
-```css
-@font-face {
-    font-family: 'TT Norms Pro';
-    src: url('TTNormsPro-Regular.woff2') format('woff2');
-    font-weight: normal;
-}
-@font-face {
-    font-family: 'TT Norms Pro';
-    src: url('TTNormsPro-Medium.woff2') format('woff2');
-    font-weight: bold;
-}
-
-body {
-    font-family: 'TT Norms Pro', Arial, sans-serif;
-    background: linear-gradient(135deg, #3a1a6a, #b07cf0);
-}
+document.getElementById('btn_op_bgcolor').onclick = function() {
+    bgIndex = (bgIndex + 1) % bgColors.length;
+    document.body.style.background = bgColors[bgIndex];
+};
 ```
 
 ---
@@ -122,9 +161,10 @@ body {
 ## Структура проекта
 
 ```
-lab1/
+lab2/
 ├── calculator.html
 ├── info.html
+├── script.js
 ├── style.css
 ├── TTNormsPro-Regular.woff2
 └── TTNormsPro-Medium.woff2
