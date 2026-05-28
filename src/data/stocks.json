@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
+    "title": "Акция 2",
+    "text": "Такой акции вы еще не видели 2"
+  },
+  {
+    "id": 3,
+    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
+    "title": "Акция 3",
+    "text": "Такой акции вы еще не видели 3"
+  },
+  {
+    "id": 4,
+    "src": "https://upload.wikimedia.org/wikipedia/commons/8/89/5000_rubles_obverse_2023.jpg",
+    "title": "деньги",
+    "text": "просто деньги"
+  },
+  {
+    "id": 5,
+    "src": "https://avatars.mds.yandex.net/i?id=1be1627959d743759350056107027a84_l-5346024-images-thumbs&n=13",
+    "title": "мем",
+    "text": "мем просто"
+  }
+]
