@@ -65,6 +65,27 @@ body {
     color: var(--white);
 }
 
+.header-btn {
+    background: var(--accent);
+    border: 1px solid var(--border-light);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.header-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.1);
+}
+
 .main {
     flex: 1;
     display: flex;
@@ -74,31 +95,122 @@ body {
 }
 
 .calculator {
-    width: fit-content;
+    width: 341px;
     padding: 20px;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 24px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.display-container {
+    width: 100%;
+    margin-bottom: 5px;
 }
 
 .result {
+    position: relative;
     width: 100%;
-    max-width: 295px; /* примерно 5 кнопок по 56px + отступы */
-    height: 56px;
-    margin-bottom: 15px;
-    padding: 0 16px;
+    height: 80px;
+    padding: 10px 16px 0 16px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border-light);
     border-radius: 16px;
     color: var(--text-primary);
     font-size: 2rem;
-    line-height: 56px;
+    line-height: 1.2;
     text-align: right;
     box-sizing: border-box;
     transition: border-color 0.2s, background 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .result:hover {
     border-color: var(--border-hover);
+}
+
+.result-value {
+    display: block;
+    width: 100%;
+    padding-left: 10px;
+    box-sizing: border-box;
+    font-size: 2rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-width: 0;
+}
+
+.result-value::-webkit-scrollbar {
+    display: none;
+}
+
+.preview {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: right;
+    width: 100%;
+    padding-left: 10px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-width: 0;
+}
+
+.preview::-webkit-scrollbar {
+    display: none;
+}
+
+.memory-controls {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.memory-controls span {
+    padding: 0 10px;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.memory-controls span:hover {
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.memory-separator {
+    cursor: default;
+    opacity: 0.5;
+}
+.memory-separator:hover {
+    transform: none !important;
+    color: var(--text-secondary) !important;
+}
+
+
+#btn_op_resultcolor {
+    cursor: pointer;
+    user-select: none;
+    padding: 0 10px;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+#btn_op_resultcolor:hover {
+    color: var(--text-primary);
+    transform: scale(1.1);
 }
 
 .my-btn {
@@ -136,7 +248,7 @@ body {
     background: var(--execute-bg);
     color: var(--white);
     border-color: transparent;
-    width: 118px; /* шире */
+    width: 118px;
 }
 
 .my-btn:hover {
@@ -177,8 +289,25 @@ body {
     border-color: transparent;
 }
 
-div > div:last-child .my-btn:last-child {
+#btn_op_000 {
+    font-size: 1.2rem;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 5px;
+}
+.row .my-btn {
     margin-right: 0;
+}
+
+.last-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 5px;
 }
 
 .footer {
